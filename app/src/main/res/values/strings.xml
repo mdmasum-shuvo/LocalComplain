@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Local Complaint</string>
+    <string name="action_settings">Settings</string>
+    <string name="empty_result">No Data</string>
+    <string name="navigation_drawer_open">drawer open</string>
+    <string name="navigation_drawer_close">drawer close</string>
+</resources>
