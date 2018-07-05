@@ -79,9 +79,6 @@ public class DrainFragment  extends Fragment {
             }
         });
 
-        if (complainList.isEmpty()){
-            showEmptyView();
-        }
 
 
     }

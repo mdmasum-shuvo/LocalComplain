@@ -12,7 +12,7 @@
         android:id="@+id/imageView3"
         android:layout_width="match_parent"
         android:layout_height="250dp"
-        android:background="#2962FF"/>
+        android:background="#31334A"/>
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -49,9 +49,9 @@
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
-                        android:background="@drawable/riple_rectangle"
+                        android:background="#4A4F6F"
                         android:padding="5dp"
-                        android:src="@drawable/image" />
+                        android:src="@drawable/picture" />
 
                     <ImageButton
                         android:id="@+id/btn_camera"

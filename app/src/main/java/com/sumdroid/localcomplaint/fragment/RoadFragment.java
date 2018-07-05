@@ -80,9 +80,6 @@ public class RoadFragment extends Fragment {
             }
         });
 
-        if (complainList.isEmpty()){
-            showEmptyView();
-        }
 
     }
 

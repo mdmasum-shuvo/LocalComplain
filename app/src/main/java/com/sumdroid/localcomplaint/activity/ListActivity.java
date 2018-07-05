@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.sumdroid.localcomplaint.R;
@@ -35,6 +36,7 @@ public class ListActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
         initVariable();
+        enableBackButton();
         initFuntionality();
         initListener();
     }
@@ -63,17 +65,14 @@ public class ListActivity extends BaseActivity {
 
         TextView tabOne = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
         tabOne.setText("        DRAIN");
-        tabOne.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_home_tab,0, 0);
         tabLayout.getTabAt(0).setCustomView(tabOne);
 
         TextView tabTwo = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
         tabTwo.setText("      ROAD");
-        tabTwo.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_person_doctor, 0, 0);
         tabLayout.getTabAt(1).setCustomView(tabTwo);
 
         TextView tabThree = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
         tabThree.setText("      ELECTRIC");
-        tabThree.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_card_travel_black_24dp, 0, 0);
         tabLayout.getTabAt(2).setCustomView(tabThree);
     }
 

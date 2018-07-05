@@ -79,10 +79,7 @@ public class ElectricityFragment extends Fragment {
             }
         });
 
-        if (complainList.isEmpty()){
-            showEmptyView();
-        }
-
+    
 
     }
 
