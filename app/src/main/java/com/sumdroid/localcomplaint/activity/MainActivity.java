@@ -125,6 +125,7 @@ public class MainActivity extends BaseActivity {
             public void onClick(View v) {
 
                 Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                //takePicture.setType("image/*");
                 if (takePicture.resolveActivity(getPackageManager()) != null) {
                     startActivityForResult(takePicture, AppConstants.REQUEST_IMAGE_CAPTURE);
 
@@ -159,8 +160,14 @@ public class MainActivity extends BaseActivity {
         Bitmap bitmap=null;
         if (requestCode==AppConstants.REQUEST_IMAGE_CAPTURE && resultCode==RESULT_OK && data != null){
 
-            bitmap = (Bitmap) data.getExtras().get("data");
-            imgChooseImage.setImageBitmap(bitmap);
+            filePathUri = (Uri) data.getExtras().get("data");
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePathUri);
+                imgChooseImage.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
 
 
         }
