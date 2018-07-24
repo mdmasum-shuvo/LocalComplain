@@ -25,11 +25,7 @@ public class ListActivity extends BaseActivity {
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private int[] tabIcons = {
-            R.drawable.ic_home_tab,
-            R.drawable.ic_person_doctor,
-            R.drawable.ic_card_travel_black_24dp
-    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
