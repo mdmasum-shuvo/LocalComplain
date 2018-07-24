@@ -19,7 +19,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.sumdroid.localcomplaint.R;
-import com.sumdroid.localcomplaint.adapter.DoctorListAdapter;
+import com.sumdroid.localcomplaint.adapter.ComplainListAdapter;
 import com.sumdroid.localcomplaint.appConstant.AppConstants;
 import com.sumdroid.localcomplaint.model.Complain;
 import com.sumdroid.localcomplaint.utils.DividerItemDecoration;
@@ -30,7 +30,7 @@ public class RoadFragment extends Fragment {
 
     private RecyclerView recycleComplainlist;
     private ArrayList<Complain> complainList;
-    DoctorListAdapter complainAdapter;
+    ComplainListAdapter complainAdapter;
     Activity mActivity;
     Context mContext;
     FirebaseDatabase mDatabse;
@@ -101,7 +101,7 @@ public class RoadFragment extends Fragment {
         mDatabse=FirebaseDatabase.getInstance();
         mRef=mDatabse.getReference(AppConstants.ROAD);
         complainList =new ArrayList<>();
-        complainAdapter =new DoctorListAdapter(mActivity, complainList);
+        complainAdapter =new ComplainListAdapter(mActivity, complainList);
         recycleComplainlist.setAdapter(complainAdapter);
         initLoader(rootView);
 

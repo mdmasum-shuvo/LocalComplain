@@ -1,6 +1,7 @@
 package com.sumdroid.localcomplaint.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,17 +12,19 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.sumdroid.localcomplaint.R;
+import com.sumdroid.localcomplaint.appConstant.AppConstants;
 import com.sumdroid.localcomplaint.model.Complain;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
-public class DoctorListAdapter extends RecyclerView.Adapter<DoctorListAdapter.CustomViewHolder> {
+public class ComplainListAdapter extends RecyclerView.Adapter<ComplainListAdapter.CustomViewHolder> {
     private Context context;
     public ArrayList<Complain> complainList;
 
 
 
-    public DoctorListAdapter(Context context, ArrayList<Complain> complainList) {
+    public ComplainListAdapter(Context context, ArrayList<Complain> complainList) {
         this.context = context;
         this.complainList = complainList;
 
@@ -68,8 +71,19 @@ public class DoctorListAdapter extends RecyclerView.Adapter<DoctorListAdapter.Cu
         holder.txtTitle.setText(complainList.get(position).getTitle());
         holder.txtDescription.setText(complainList.get(position).getDescription());
 
-        //Loading image from Glide library.
-        Glide.with(context).load(complainList.get(position).getImgUrl()).into(holder.imgProfile);
+        if (!complainList.get(position).getImgUrl().contains("http")){
+            try {
+                Bitmap bitmap= AppConstants.decodeFromFirebaseBase64(complainList.get(position).getImgUrl());
+                holder.imgProfile.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            //Loading image from Glide library.
+            Glide.with(context).load(complainList.get(position).getImgUrl()).into(holder.imgProfile);
+        }
+
 
     }
 

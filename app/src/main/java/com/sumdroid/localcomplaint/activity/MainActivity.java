@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.util.Base64;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.ArrayAdapter;
@@ -32,6 +33,7 @@ import com.sumdroid.localcomplaint.appConstant.AppConstants;
 import com.sumdroid.localcomplaint.model.Complain;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 
@@ -42,6 +44,7 @@ public class MainActivity extends BaseActivity {
     private ImageView btnSave;
     private Activity mActivity;
     private Context mContext;
+    private Bitmap captureBitmap;
     private ProgressDialog progressDialog ;
     // Creating URI.
     private Uri filePathUri;
@@ -157,16 +160,11 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Bitmap bitmap=null;
         if (requestCode==AppConstants.REQUEST_IMAGE_CAPTURE && resultCode==RESULT_OK && data != null){
 
-            filePathUri = (Uri) data.getExtras().get("data");
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePathUri);
-                imgChooseImage.setImageBitmap(bitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            Bundle extras = data.getExtras();
+            captureBitmap = (Bitmap) extras.get("data");
+            imgChooseImage.setImageBitmap(captureBitmap);
 
 
 
@@ -178,7 +176,7 @@ public class MainActivity extends BaseActivity {
             try {
 
                 // Getting selected image into Bitmap.
-                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePathUri);
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePathUri);
                 // Setting up bitmap selected image into ImageView.
                 imgChooseImage.setImageBitmap(bitmap);
 
@@ -211,15 +209,16 @@ public class MainActivity extends BaseActivity {
 
             return;
         }
+        // Setting progressDialog Title.
+        progressDialog.setTitle("Uploading...");
 
+        // Showing progressDialog.
+        progressDialog.show();
+        progressDialog.setCancelable(false);
         // Checking whether FilePathUri Is empty or not.
         if (filePathUri != null) {
 
-            // Setting progressDialog Title.
-            progressDialog.setTitle("Uploading...");
 
-            // Showing progressDialog.
-            progressDialog.show();
 
             // Creating second StorageReference.
             StorageReference storageReference2nd = storageReference.child(AppConstants.STORAGE_PATH + System.currentTimeMillis() + "." + GetFileExtension(filePathUri));
@@ -230,14 +229,6 @@ public class MainActivity extends BaseActivity {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                            // Getting image name from EditText and store into string variable.
-
-
-                            // Hiding the progressDialog after done uploading.
-
-
-                            // Showing toast message after done uploading.
-                            Toast.makeText(getApplicationContext(), "Data Uploaded Successfully ", Toast.LENGTH_LONG).show();
 
                             @SuppressWarnings("VisibleForTests")
                             Complain imageUploadInfo = new Complain(taskSnapshot.getDownloadUrl().toString(), title, description);
@@ -248,6 +239,8 @@ public class MainActivity extends BaseActivity {
                             // Adding image upload id s child element into databaseReference.
                             databaseReference.child(ImageUploadId).setValue(imageUploadInfo);
                             progressDialog.dismiss();
+                            Toast.makeText(getApplicationContext(), "Data Uploaded Successfully ", Toast.LENGTH_LONG).show();
+                            clearDataField();
                         }
                     })
                     // If something goes wrong .
@@ -274,6 +267,11 @@ public class MainActivity extends BaseActivity {
                         }
                     });
         }
+
+        else if (captureBitmap!=null){
+            encodeBitmapAndSaveToFirebase(captureBitmap,title,description);
+
+        }
         else {
 
             Toast.makeText(mContext, "Please Select Image or Add Image Name", Toast.LENGTH_LONG).show();
@@ -282,6 +280,28 @@ public class MainActivity extends BaseActivity {
 
 
     }
+
+    private void clearDataField() {
+        eTitle.setText("");
+        eDescription.setText("");
+        imgChooseImage.setImageResource(R.drawable.picture);
+    }
+
+    private void encodeBitmapAndSaveToFirebase(Bitmap bitmap,String title,String description) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        String imageEncoded = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
+        Complain imageUploadInfo = new Complain(imageEncoded, title, description);
+        // Getting image upload ID.
+        String ImageUploadId = databaseReference.push().getKey();
+
+        // Adding image upload id s child element into databaseReference.
+        databaseReference.child(ImageUploadId).setValue(imageUploadInfo);
+        progressDialog.dismiss();
+        Toast.makeText(getApplicationContext(), "Data Uploaded Successfully ", Toast.LENGTH_LONG).show();
+        clearDataField();
+    }
+
     private boolean validationcheck(String title,String description){
         boolean valid=true;
 

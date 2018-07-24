@@ -1,5 +1,11 @@
 package com.sumdroid.localcomplaint.appConstant;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+
+import java.io.IOException;
+
 /**
  * Created by Masum on 3/8/2018.
  */
@@ -24,4 +30,9 @@ public class AppConstants {
     public static final String IMAGE_URL_FIELD ="imgUrl" ;
     public static final String TITLE_FIELD ="title" ;
     public static final String DESCRIPTION_FIELD ="description" ;
+
+    public static Bitmap decodeFromFirebaseBase64(String image) throws IOException {
+        byte[] decodedByteArray = android.util.Base64.decode(image, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(decodedByteArray, 0, decodedByteArray.length);
+    }
 }
